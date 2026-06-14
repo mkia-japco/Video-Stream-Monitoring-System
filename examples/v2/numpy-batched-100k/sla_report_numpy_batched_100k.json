@@ -1,0 +1,99 @@
+{
+  "environment": {
+    "python": "3.11.2 (main, Apr  8 2026, 01:58:00) [GCC 12.2.0]",
+    "platform": "Linux-6.1.0-49-amd64-x86_64-with-glibc2.36",
+    "processor": "",
+    "torch_available": true,
+    "torch_cuda_available": true,
+    "faiss_available": true,
+    "pynvml_available": true,
+    "nvml_ok": true,
+    "torch_version": "2.6.0+cu124",
+    "cuda_device_name": "NVIDIA GeForce RTX 3090",
+    "cuda_device_total_memory_gib": 23.68841552734375,
+    "nvml_device_name": "NVIDIA GeForce RTX 3090",
+    "nvml_total_memory_gib": 24.0
+  },
+  "vram_snapshots": [
+    {
+      "label": "before_benchmark",
+      "timestamp_s": 1781382919.3950026,
+      "nvml_used_gib": 18.421630859375,
+      "nvml_total_gib": 24.0,
+      "torch_allocated_gib": 0.0,
+      "torch_reserved_gib": 0.0,
+      "torch_peak_allocated_gib": 0.0,
+      "torch_peak_reserved_gib": 0.0
+    },
+    {
+      "label": "after_vector_search",
+      "timestamp_s": 1781382920.43409,
+      "nvml_used_gib": 18.418701171875,
+      "nvml_total_gib": 24.0,
+      "torch_allocated_gib": 0.0,
+      "torch_reserved_gib": 0.0,
+      "torch_peak_allocated_gib": 0.0,
+      "torch_peak_reserved_gib": 0.0
+    },
+    {
+      "label": "after_llm_inference",
+      "timestamp_s": 1781382921.8545973,
+      "nvml_used_gib": 18.416748046875,
+      "nvml_total_gib": 24.0,
+      "torch_allocated_gib": 0.0,
+      "torch_reserved_gib": 0.0,
+      "torch_peak_allocated_gib": 0.0,
+      "torch_peak_reserved_gib": 0.0
+    }
+  ],
+  "peak_vram_gib": 18.421630859375,
+  "vector_search": {
+    "backend": "numpy.batched_bruteforce_fallback",
+    "chunks": 100000,
+    "dim": 768,
+    "top_k": 100,
+    "runs": 20,
+    "warmup_runs": 3,
+    "numpy_batch_size": 8192,
+    "build_time_ms": 0.0009190007403958589,
+    "mean_ms": 13.716184800159681,
+    "p50_ms": 10.139844499462924,
+    "p95_ms": 27.538365200234697,
+    "min_ms": 9.758289001183584,
+    "max_ms": 30.42192300017632,
+    "std_ms": 6.352096073074438
+  },
+  "llm_inference": {
+    "backend": "lmstudio",
+    "model": "qwen3-coder-30b-a3b-instruct",
+    "url": "http://localhost:1234/api/v0/chat/completions",
+    "prompt_chars": 170,
+    "max_tokens": 128,
+    "ttft_ms": 66.0,
+    "total_time_ms": 1379.8152409999602,
+    "generation_time_ms": 1291.0,
+    "output_tokens": 128,
+    "tokens_per_second": 98.3733539891557,
+    "metric_source": "lmstudio_native_stats",
+    "response_preview": "To reduce latency on a single RTX 3090 running YOLO vision inference, vector retrieval, and local LLM generation:\\n\\n1. **Model Optimization**: \\n   - Use YOLOv8n or smaller variants for faster inference\\n   - Quantize LLM to INT4/INT8 precision\\n   - Optimize vector database with FAISS IVF indexing\\n\\n2. **Hardware Utilization**:\\n   - Enable mixed precision (FP16) training/inference\\n   - Use TensorRT for YOLO and LLM optimization\\n   - Implement batch processing where possible\\n\\n3. **System"
+  },
+  "sla": {
+    "retrieval_latency_target_ms": 150.0,
+    "llm_tokens_per_second_target": 15.0,
+    "vram_target_gib": 24.0,
+    "retrieval_pass": true,
+    "llm_speed_pass": true,
+    "vram_pass": true,
+    "overall_pass": true
+  },
+  "notes": [
+    "Device-wide VRAM is measured via NVML when available.",
+    "PyTorch CUDA memory stats are shown when torch.cuda is available.",
+    "VramSampler uses threading.Lock around shared samples for thread-safe append/read.",
+    "Vector search uses FAISS IndexFlatIP when available; otherwise batched NumPy fallback is used.",
+    "NumPy fallback processes vectors in batches to reduce temporary memory spikes.",
+    "LM Studio native stats are preferred for TTFT and tokens/sec when backend=lmstudio.",
+    "Ollama supports both /api/generate via backend=ollama-generate and /api/chat via backend=ollama-chat.",
+    "Use --strict-gpu-monitor for fail-fast behavior on NVML/CUDA monitoring errors."
+  ]
+}

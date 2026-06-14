@@ -1,0 +1,85 @@
+2026-06-14 00:05:01,921 | INFO | local_gpu_sla_profiler | Local GPU SLA Profiler started
+2026-06-14 00:05:01,921 | INFO | local_gpu_sla_profiler | Arguments: {'backend': 'lmstudio', 'model': 'qwen3-coder-30b-a3b-instruct', 'llm_url': 'http://localhost:1234/api/v0/chat/completions', 'prompt': 'You are benchmarking a local RAG system. Briefly explain how to reduce latency when YOLO vision inference, vector retrieval, and local LLM generation run on one RTX 3090.', 'max_tokens': 256, 'temperature': 0.2, 'timeout_s': 300, 'chunks': 31000, 'dim': 768, 'top_k': 100, 'query_runs': 50, 'warmup_runs': 5, 'seed': 42, 'numpy_batch_size': 8192, 'force_numpy': False, 'device_index': 0, 'vram_sample_interval_s': 0.05, 'strict_gpu_monitor': True, 'retrieval_sla_ms': 150.0, 'llm_sla_tps': 15.0, 'vram_sla_gib': 24.0, 'json_out': 'examples/v2/faiss-31k-strict-debug/sla_report_lmstudio_v2_debug.json', 'log_level': 'DEBUG', 'log_file': 'examples/v2/faiss-31k-strict-debug/profiler_v2_debug.log'}
+2026-06-14 00:05:01,931 | INFO | local_gpu_sla_profiler | NVML initialized successfully for device index 0
+2026-06-14 00:05:01,964 | INFO | local_gpu_sla_profiler | PyTorch CUDA peak memory stats reset
+2026-06-14 00:05:01,965 | INFO | local_gpu_sla_profiler | Starting vector benchmark: chunks=31000 dim=768 top_k=100 runs=50 warmup=5
+2026-06-14 00:05:02,187 | INFO | local_gpu_sla_profiler | Using FAISS IndexFlatIP backend
+2026-06-14 00:05:02,405 | INFO | local_gpu_sla_profiler | Vector benchmark completed: mean=3.92ms p95=4.04ms
+2026-06-14 00:05:02,406 | INFO | local_gpu_sla_profiler | VRAM sampler started with interval 0.050s
+2026-06-14 00:05:02,406 | INFO | local_gpu_sla_profiler | Starting LM Studio benchmark: model=qwen3-coder-30b-a3b-instruct url=http://localhost:1234/api/v0/chat/completions
+2026-06-14 00:05:02,407 | DEBUG | urllib3.connectionpool | Starting new HTTP connection (1): localhost:1234
+2026-06-14 00:05:05,029 | DEBUG | urllib3.connectionpool | http://localhost:1234 "POST /api/v0/chat/completions HTTP/1.1" 200 2100
+2026-06-14 00:05:05,029 | INFO | local_gpu_sla_profiler | LM Studio benchmark completed: ttft=0.045 tps=99.609375
+2026-06-14 00:05:05,042 | INFO | local_gpu_sla_profiler | VRAM sampler stopped cleanly
+2026-06-14 00:05:05,042 | INFO | local_gpu_sla_profiler | VRAM sampler collected 52 samples
+2026-06-14 00:05:05,043 | INFO | local_gpu_sla_profiler | JSON report written to examples/v2/faiss-31k-strict-debug/sla_report_lmstudio_v2_debug.json
+2026-06-14 00:05:05,043 | INFO | local_gpu_sla_profiler | Local GPU SLA Profiler finished successfully
+2026-06-14 00:05:05,043 | INFO | local_gpu_sla_profiler | NVML shutdown completed
+
+========================================================================
+LOCAL GPU SLA PROFILER REPORT
+========================================================================
+
+[Environment]
+Platform: Linux-6.1.0-49-amd64-x86_64-with-glibc2.36
+Python: 3.11.2
+GPU (NVML): NVIDIA GeForce RTX 3090
+GPU (Torch): NVIDIA GeForce RTX 3090
+Total VRAM (NVML): 24.000 GiB
+Total VRAM (Torch): 23.688 GiB
+Torch CUDA Available: True
+FAISS Available: True
+NVML Available/OK: True / True
+
+[VRAM Snapshots]
+before_benchmark             | NVML used:   18.416 GiB | Torch allocated:    0.000 GiB | Torch reserved:    0.000 GiB
+after_vector_search          | NVML used:   18.416 GiB | Torch allocated:    0.000 GiB | Torch reserved:    0.000 GiB
+after_llm_inference          | NVML used:   18.414 GiB | Torch allocated:    0.000 GiB | Torch reserved:    0.000 GiB
+Peak Device VRAM During LLM: 18.416 GiB
+
+[Vector Search]
+Backend: faiss.IndexFlatIP
+Chunks: 31,000
+Dimension: 768
+Top-K: 100
+Runs/Warmup: 50/5
+NumPy Batch Size: 8192
+Index Build Time: 15.61 ms
+Mean Latency: 3.92 ms
+P50 Latency: 3.90 ms
+P95 Latency: 4.04 ms
+Min/Max Latency: 3.85 / 4.09 ms
+Std Latency: 0.05 ms
+
+[LLM Inference]
+Backend: lmstudio
+Model: qwen3-coder-30b-a3b-instruct
+URL: http://localhost:1234/api/v0/chat/completions
+Prompt Chars: 170
+Max Tokens: 256
+TTFT: 45.00 ms
+Total Time: 2622.71 ms
+Generation Time: 2560.00 ms
+Output Tokens: 256
+Tokens/sec: 99.61
+Metric Source: lmstudio_native_stats
+Response Preview: To reduce latency on a single RTX 3090 running YOLO vision inference, vector retrieval, and local LLM generation:\n\n1. **Model Optimization**: \n   - Use YOLOv8n or smaller variants for faster inference\n   - Quantize the LLM (INT4/8) to reduce memory bandwidth requirements\n   - Optimize vector database with FAISS IVF indexing\n\n2. **Hardware Utilization**:\n   - Enable mixed precision (FP16) throughout all components\n   - Use CUDA streams for overlapping computation and memory transfers\n   - Set app
+
+[SLA Verdict]
+Retrieval P95 <= 150.0 ms: PASS
+LLM Speed >= 15.0 tokens/sec: PASS
+Peak VRAM <= 24.0 GiB: PASS
+Overall: PASS
+
+[Notes]
+- Device-wide VRAM is measured via NVML when available.
+- PyTorch CUDA memory stats are shown when torch.cuda is available.
+- VramSampler uses threading.Lock around shared samples for thread-safe append/read.
+- Vector search uses FAISS IndexFlatIP when available; otherwise batched NumPy fallback is used.
+- NumPy fallback processes vectors in batches to reduce temporary memory spikes.
+- LM Studio native stats are preferred for TTFT and tokens/sec when backend=lmstudio.
+- Ollama supports both /api/generate via backend=ollama-generate and /api/chat via backend=ollama-chat.
+- Use --strict-gpu-monitor for fail-fast behavior on NVML/CUDA monitoring errors.
+========================================================================
+
+JSON report written to: examples/v2/faiss-31k-strict-debug/sla_report_lmstudio_v2_debug.json

@@ -1,0 +1,5 @@
+numpy
+requests
+torch
+faiss-cpu
+nvidia-ml-py

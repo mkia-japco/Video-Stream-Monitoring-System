@@ -1,0 +1,63 @@
+
+========================================================================
+LOCAL GPU SLA PROFILER REPORT
+========================================================================
+
+[Environment]
+Platform: Linux-6.1.0-49-amd64-x86_64-with-glibc2.36
+Python: 3.11.2
+GPU (NVML): NVIDIA GeForce RTX 3090
+GPU (Torch): NVIDIA GeForce RTX 3090
+Total VRAM (NVML): 24.000 GiB
+Total VRAM (Torch): 23.688 GiB
+Torch CUDA Available: True
+FAISS Available: True
+NVML Available/OK: True / True
+
+[VRAM Snapshots]
+before_benchmark             | NVML used:   18.388 GiB | Torch allocated:    0.000 GiB | Torch reserved:    0.000 GiB
+after_vector_search          | NVML used:   18.388 GiB | Torch allocated:    0.000 GiB | Torch reserved:    0.000 GiB
+after_llm_inference          | NVML used:   18.490 GiB | Torch allocated:    0.000 GiB | Torch reserved:    0.000 GiB
+Peak Device VRAM During LLM: 18.492 GiB
+
+[Vector Search]
+Backend: faiss.IndexFlatIP
+Chunks: 31,000
+Dimension: 768
+Top-K: 100
+Runs/Warmup: 50/5
+Index Build Time: 18.34 ms
+Mean Latency: 4.82 ms
+P50 Latency: 4.72 ms
+P95 Latency: 6.10 ms
+Min/Max Latency: 3.95 / 6.68 ms
+Std Latency: 0.71 ms
+
+[LLM Inference]
+Backend: lmstudio
+Model: qwen3-coder-30b-a3b-instruct
+URL: http://localhost:1234/api/v0/chat/completions
+Prompt Chars: 170
+Max Tokens: 256
+TTFT: 329.00 ms
+Total Time: 2481.76 ms
+Generation Time: 2102.00 ms
+Output Tokens: 185
+Tokens/sec: 86.99
+Metric Source: lmstudio_native_stats
+Response Preview: To reduce latency on a single RTX 3090 for YOLO vision inference, vector retrieval, and local LLM generation:\n\n1. **Model Optimization**: Use TensorRT or ONNX Runtime for YOLO inference; quantize the LLM (4-bit) and optimize vectors with FAISS IVF indexing\n2. **Pipeline Parallelism**: Run vision + vector retrieval on GPU while LLM generation uses CPU offloading, or use CUDA streams for concurrent execution\n3. **Memory Management**: Enable mixed precision (FP16), pre-allocate memory pools, and us
+
+[SLA Verdict]
+Retrieval P95 <= 150.0 ms: PASS
+LLM Speed >= 15.0 tokens/sec: PASS
+Peak VRAM <= 24.0 GiB: PASS
+Overall: PASS
+
+[Notes]
+- Device-wide VRAM is measured via NVML when available.
+- PyTorch CUDA memory stats are shown when torch.cuda is available.
+- Vector search uses FAISS IndexFlatIP when faiss-cpu is installed; otherwise NumPy brute-force fallback is used.
+- For LM Studio, native REST API stats are preferred for TTFT and tokens/sec; fallback estimates are marked in Metric Source.
+========================================================================
+
+JSON report written to: sla_report_lmstudio_256.json

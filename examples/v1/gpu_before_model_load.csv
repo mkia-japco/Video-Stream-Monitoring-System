@@ -1,0 +1,2 @@
+timestamp, name, driver_version, memory.total [MiB], memory.used [MiB], utilization.gpu [%], temperature.gpu, power.draw [W]
+2026/06/11 21:23:09.283, NVIDIA GeForce RTX 3090, 535.261.03, 24576 MiB, 879 MiB, 8 %, 44, 75.80 W
