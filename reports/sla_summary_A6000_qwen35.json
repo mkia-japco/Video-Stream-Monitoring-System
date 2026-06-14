@@ -1,0 +1,71 @@
+{
+  "type": "summary",
+  "timestamp": "2026-06-11T12:31:16.494325+00:00",
+  "yolo_backend": "ultralytics:yolov8n.pt",
+  "yolo_iterations": 40,
+  "yolo_errors": [],
+  "vector_backend": "numpy.dot+argpartition",
+  "models": {
+    "qwen3.5:35b": {
+      "runs": 10,
+      "successful_api_runs": 10,
+      "api_failure_rate": 0.0,
+      "json_valid_runs": 10,
+      "json_failure_rate": 0.0,
+      "ttft_ms": {
+        "mean": 2854.74374,
+        "std": 27.198114669431632,
+        "min": 2806.8356,
+        "max": 2891.4777
+      },
+      "tokens_per_sec": {
+        "mean": 90.94598407102377,
+        "std": 1.2105672977830186,
+        "min": 89.07534076709246,
+        "max": 92.79774225905136
+      },
+      "total_ms_wall": {
+        "mean": 4042.01844,
+        "std": 42.57475810120351,
+        "min": 3964.3036,
+        "max": 4101.5768
+      },
+      "ollama_total_duration_ms": {
+        "mean": 1969.84889,
+        "std": 33.8225862381749,
+        "min": 1912.2713,
+        "max": 2024.2695
+      },
+      "vector_search_ms": {
+        "mean": 5.90338,
+        "std": 0.6217464199065941,
+        "min": 5.0751,
+        "max": 7.2141
+      },
+      "vram_after_gb": {
+        "mean": 34.0009765625,
+        "std": 0.0,
+        "min": 34.0009765625,
+        "max": 34.0009765625
+      },
+      "temperature_after_c": {
+        "mean": 37.3,
+        "std": 2.7908580918579307,
+        "min": 33.0,
+        "max": 41.0
+      }
+    }
+  },
+  "final_gpu": {
+    "timestamp": "2026-06-11T12:31:16.525575+00:00",
+    "label": "final",
+    "gpu_index": 0,
+    "vram_used_gb": 34.0009765625,
+    "vram_total_gb": 47.98828125,
+    "temperature_c": 39.0,
+    "utilization_gpu_pct": 0.0,
+    "power_w": 134.4,
+    "torch_allocated_gb": 0.005828857421875,
+    "torch_reserved_gb": 0.03515625
+  }
+}
